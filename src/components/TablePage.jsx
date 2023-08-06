@@ -1,67 +1,60 @@
 import React, { useState } from 'react';
-import Switch from 'react-switch';
+import SlidingSwitch from './SlidingSwitch'; // Import the SlidingSwitch component
 
 const TablePage = () => {
   const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const [pressedHeaderIndex, setPressedHeaderIndex] = useState(null);
 
   const handleSwitchChange = (checked) => {
     setIsSwitchOn(checked);
   };
 
   const handleNextButtonClick = () => {
-    // This function will be called when the Next button is clicked.
     alert('Next button is pressed!');
   };
+
+  const handleHeaderClick = (index) => {
+    setPressedHeaderIndex(index === pressedHeaderIndex ? null : index);
+  };
+
+  // 2D array to store values for each row and column
+  const data = [
+    ['', 'Mobile', 'Basic', 'Standard', 'Premium'],
+    ['Monthly Pricing', '₹100', '₹200', '₹500', '₹700'],
+    ['Video Quality', 'Good', 'Good', 'Better', 'Best'],
+    ['Resolution', '480p', '480p', '1080p', '4k + HDR'],
+    ['Devices You Can Watch', '2', '4', '4', '4'],
+  ];
+
+  const isHeaderSelected = (colIndex) => pressedHeaderIndex === colIndex;
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
       <div style={{ padding: '5vh' }}>
         <table className="table-fixed border-collapse">
           <thead>
-            {/* Table header content */}
             <tr>
               <th className="w-1/5">
-                {/* Switch content */}
-                <div
-                  style={{
-                    width: '10vw',
-                    height: '10vh',
-                    backgroundColor: 'white',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    border: '1px solid #ccc',
-                    marginLeft: isSwitchOn ? '20px' : '0',
-                  }}
-                >
-                  <Switch
-                    onChange={handleSwitchChange}
-                    checked={isSwitchOn}
-                    onColor="#86d3ff"
-                    onHandleColor="#2693e6"
-                    handleDiameter={24}
-                    uncheckedIcon={false}
-                    checkedIcon={false}
-                    boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-                    activeBoxShadow="0px 1px 5px rgba(0, 0, 0, 0.2)"
-                    height={16}
-                    width={40}
-                  />
-                </div>
+                {/* Use the SlidingSwitch component here */}
+                <SlidingSwitch checked={isSwitchOn} onChange={handleSwitchChange} />
               </th>
               {[...Array(4)].map((_, index) => (
-                <th key={index + 1} className="w-1/5">
+                <th key={index + 1} className="w-1/5" style={{ padding: '3vh' }}>
                   {/* Header content */}
                   <div
+                    className={`header-wrapper ${isHeaderSelected(index) ? 'elevated' : ''}`}
+                    onClick={() => handleHeaderClick(index)}
                     style={{
-                      width: '10vw',
-                      height: '10vh',
-                      backgroundColor: 'navy',
+                      width: isHeaderSelected(index) ? 'calc(5vw + 5vh)' : '5vw',
+                      height: isHeaderSelected(index) ? 'calc(10vh + 5vh)' : '10vh',
+                      backgroundColor: isHeaderSelected(index) ? '#1E40AF' : '#90CDF4',
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
                       border: '1px solid #ccc',
-                      marginLeft: '5vh' ,
+                      padding: '5px', // Add padding from all sides
+                      transition: 'background-color 0.2s ease, height 0.2s ease, width 0.2s ease',
+                      cursor: 'pointer',
                     }}
                   >
                     <div
@@ -72,7 +65,7 @@ const TablePage = () => {
                         color: 'white',
                       }}
                     >
-                      Header {index + 1}
+                      {data[0][index + 1]}
                     </div>
                   </div>
                 </th>
@@ -80,12 +73,23 @@ const TablePage = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Table body content */}
-            {[...Array(5)].map((_, rowIndex) => (
+            {data.slice(1).map((rowData, rowIndex) => (
               <tr key={rowIndex} className={`text-center ${rowIndex > 0 ? 'border-t border-gray-500' : ''}`}>
-                {[...Array(5)].map((_, colIndex) => (
+                {rowData.map((value, colIndex) => (
                   <td key={colIndex} className="px-4 py-2">
-                    Row {rowIndex + 1}, Col {colIndex + 1}
+                    <div
+                      className={`column-wrapper`}
+                      style={{
+                        height: '10vh',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        color: isHeaderSelected(pressedHeaderIndex) && colIndex === pressedHeaderIndex+1 ? 'gray' : 'black',
+                        fontSize: isHeaderSelected(pressedHeaderIndex) && colIndex === pressedHeaderIndex+1 ? '18px' : 'inherit',
+                      }}
+                    >
+                      {value}
+                    </div>
                   </td>
                 ))}
               </tr>

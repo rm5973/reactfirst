@@ -1,0 +1,13 @@
+/* src/tailwind.css */
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+body {
+  @apply bg-blue-500;
+}
+
+.login-form {
+    @apply h-96; /* Set the height to 24rem (96/4 = 24) */
+  }
