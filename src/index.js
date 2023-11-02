@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import './tailwind.css'; 
+// index.js or another central file
+import 'material-icons/iconfont/material-icons.css';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
